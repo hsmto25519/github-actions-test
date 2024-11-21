@@ -28,5 +28,5 @@ jobs:
           
           echo "upload $log_file_name to S3: "
 
-          unzip $log_file_name
+          # unzip $log_file_name
           ls
