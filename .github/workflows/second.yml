@@ -17,4 +17,4 @@ jobs:
           RUN_ID=${{ github.event.workflow_run.id }}
           echo "Downloading artifact from Run ID: $RUN_ID"
 
-          echo "result: ${{ github.event.workflow_run.conclusion }}""
+          echo "result: ${{ github.event.workflow_run.conclusion }}"
