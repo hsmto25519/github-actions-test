@@ -6,5 +6,7 @@ on:
 jobs:
   first:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - run: echo "First action successfully finished!"
