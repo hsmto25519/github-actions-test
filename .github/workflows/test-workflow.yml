@@ -1,4 +1,4 @@
-name: First action
+name: Target Log Workflow
 
 on:
   workflow_dispatch:
@@ -9,4 +9,4 @@ jobs:
     permissions:
       actions: write
     steps:
-      - run: echo "First action successfully finished!"
+      - run: echo "test workflow successfully finished!"

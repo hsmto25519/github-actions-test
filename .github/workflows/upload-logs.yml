@@ -1,0 +1,35 @@
+name: Upload Logs
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: 
+      - "Target Log Workflow"
+    types: 
+      - "completed"
+
+jobs:
+  second:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    steps:
+      - name: Download the Workflow Log
+        run: |
+          workflow_id=${{ github.event.workflow_run.id }}
+          log_prefix=$(date +"%Y%m%d%H%M%S")
+          log_file_name=${log_prefix}_logs.zip
+
+          # Download logs using GitHub API
+          curl -H "Authorization: token $GITHUB_TOKEN" \
+               -L \
+               "https://api.github.com/repos/${{ github.repository }}/actions/runs/$workflow_id/logs" \
+               --output $log_file_name
+          
+          # pass the log file name to the next step
+          echo "LOG_FILE_NAME=$log_file_name" >> $GITHUB_ENV
+
+      - name: Upload the Log to S3
+        run: |
+          echo "Uploading $LOG_FILE_NAME to S3 bucket: ${{ vars.LOG_TARGET_S3 }}"
+          aws s3 cp $LOG_FILE_NAME s3://${{ vars.LOG_TARGET_S3 }}/github_actions/$LOG_FILE_NAME
