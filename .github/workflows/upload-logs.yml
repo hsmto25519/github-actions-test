@@ -30,9 +30,12 @@ jobs:
           echo "LOG_FILE_NAME=$log_file_name" >> $GITHUB_ENV
 
       - name: Check variables
+        env:
+          EVENT_JSON: ${{ toJson(github.event) }}
+          INPUT_JSON: ${{ inputs }}
         run: |
-          echo "event: ${{ github.event }}"
-          echo "intpus: ${{ inputs.logLevel }}"
+          echo "event: $EVENT_JSON"
+          echo "inputs: $INPUT_JSON"
           
       - name: Upload the Log to S3
         run: |
