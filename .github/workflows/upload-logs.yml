@@ -29,7 +29,12 @@ jobs:
           # pass the log file name to the next step
           echo "LOG_FILE_NAME=$log_file_name" >> $GITHUB_ENV
 
+      - name: Check variables
+        run: |
+          echo "event: ${{ github.event }}"
+          echo "intpus: ${{ inputs.logLevel }}"
+          
       - name: Upload the Log to S3
         run: |
           echo "Uploading $LOG_FILE_NAME to S3 bucket: ${{ vars.LOG_TARGET_S3 }}"
-          aws s3 cp $LOG_FILE_NAME "s3://${{ vars.LOG_TARGET_S3 }}/github_actions/$LOG_FILE_NAME"
+          #aws s3 cp $LOG_FILE_NAME "s3://${{ vars.LOG_TARGET_S3 }}/github_actions/$LOG_FILE_NAME"
