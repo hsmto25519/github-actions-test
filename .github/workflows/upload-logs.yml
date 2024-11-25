@@ -32,7 +32,7 @@ jobs:
       - name: Check variables
         env:
           EVENT_JSON: ${{ toJson(github.event) }}
-          INPUT_JSON: ${{ inputs }}
+          INPUT_JSON: ${{ toJson(inputs) }}
         run: |
           echo "event: $EVENT_JSON"
           echo "inputs: $INPUT_JSON"
