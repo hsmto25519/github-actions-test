@@ -2,6 +2,15 @@ name: Target Log Workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      input_target:
+        description: Environment to deploy my app
+        required: true
+        type: choice
+        options:
+          - dev
+          - stg
+          - prd
 
 jobs:
   first:
