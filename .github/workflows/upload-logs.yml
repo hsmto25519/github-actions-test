@@ -3,7 +3,7 @@ name: Upload Logs
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ${{ vars.TARGET_WORKFLOWS }}
+    workflows: [${{ vars.TARGET_WORKFLOWS }}]
     types: 
       - "completed"
 
