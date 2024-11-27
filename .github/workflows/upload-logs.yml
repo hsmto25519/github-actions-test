@@ -35,8 +35,44 @@ jobs:
         run: |
           echo "event: $EVENT_JSON"
           echo "inputs: $INPUT_JSON"
-          
+
+      - name: Determine Target Path
+        id: determine_path
+        run: |
+          # Define the function to map branches to environments
+          target_env_path() {
+            case "$1" in
+              main)
+                echo "dev"
+                ;;
+              stg)
+                echo "stg"
+                ;;
+              prd)
+                echo "prd"
+                ;;
+              *)
+                echo "unknown"
+                ;;
+            esac
+          }
+
+          # Call the function with the head branch
+          head_branch="${{ github.event.workflow_run.head_branch }}"
+          env_path=$(target_env_path "$head_branch")
+
+          # Check for unsupported environment
+          if [[ "$env_path" == "unknown" ]]; then
+            echo "Unsupported branch: $head_branch"
+            exit 1
+          fi
+
+          # Set the target path
+          target_path="myrepo/$env/${{ env.LOG_FILE_NAME }}"
+          echo "TARGET_PATH=$target_path" >> $GITHUB_ENV
+
       - name: Upload the Log to S3
         run: |
           echo "Uploading $LOG_FILE_NAME to S3 bucket: ${{ vars.LOG_TARGET_S3 }}"
+          echo "Target path: $TARGET_PATH"
           #aws s3 cp $LOG_FILE_NAME "s3://${{ vars.LOG_TARGET_S3 }}/github_actions/$LOG_FILE_NAME"
